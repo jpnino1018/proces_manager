@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Process Monitor</title>
+    <script>
+        async function stopProcess(pid) {
+            const response = await fetch(`stop_process/${pid}/`, { method: "GET" });
+            const data = await response.json();
+            alert(data.message);
+            location.reload();
+        }
+    </script>
+</head>
+<body>
+    <h1>Running Processes</h1>
+    <table border="1">
+        <tr>
+            <th>Process ID</th>
+            <th>Name</th>
+            <th>CPU Usage (%)</th>
+            <th>Actions</th>
+        </tr>
+        {% for process in processes %}
+        <tr id="process-{{ process.Id }}">
+            <td>{{ process.Id }}</td>
+            <td>{{ process.ProcessName }}</td>
+            <td>{{ process.CPU }}</td>
+            <td><button onclick="stopProcess({{ process.Id }})">Stop</button></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
