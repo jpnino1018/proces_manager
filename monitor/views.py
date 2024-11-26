@@ -23,12 +23,20 @@ def get_processes():
         # Parse Linux output into JSON
         processes = []
         for line in output.splitlines():
-            pid, name, cpu = line.split(None, 2)
-            processes.append({
-                "Id": int(pid),
-                "ProcessName": name,
-                "CPU": float(cpu)
-            })
+            parts = line.strip().split()
+            if len(parts) >= 3:
+                pid = parts[0]
+                name = parts[1]
+                # Asegurarse de que el CPU sea un número válido
+                try:
+                    cpu = float(parts[2])
+                except ValueError:
+                    cpu = 0.0
+                processes.append({
+                    "Id": int(pid),
+                    "ProcessName": name,
+                    "CPU": cpu
+                })
         return processes
     
 def list_processes(request):
